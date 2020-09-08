@@ -5,7 +5,7 @@ function Player:new(x, y, scaleFactor)
 
   that.x = x
   that.y = y
-  that.speed = 4
+  that.speed = 2
 
   that.imageWidth = 64
   that.imageHeight = 96
@@ -29,6 +29,10 @@ function Player:getEndY()
   return self.imageHeight * self.y / self.scaleFactor
 end
 
+function Player:getSpeed()
+    return self.speed * self.y / self.scaleFactor
+end
+
 function Player:update(dt, Keys)
   local originalX = self.x
   local originalY = self.y
@@ -36,13 +40,13 @@ function Player:update(dt, Keys)
   for key, value in pairs(Keys) do
     if value == true then
       if key == 'up' then
-        self.y = self.y - self.speed
+        self.y = self.y - self:getSpeed()
       elseif key == 'down' then
-        self.y = self.y + self.speed
+        self.y = self.y + self:getSpeed()
       elseif key == 'left' then
-        self.x = self.x - self.speed
+        self.x = self.x - self:getSpeed()
       elseif key == 'right' then
-        self.x = self.x + self.speed
+        self.x = self.x + self:getSpeed()
       end
     end
   end
