@@ -10,11 +10,13 @@ Player.PUNCH_HITBOX_y = 0
 Player.PUNCH_HITBOX_HEIGHT = 44
 Player.PUNCH_HITBOX_WIDTH = 44
 
-function Player:new(x, y)
+function Player:new(stage)
   local that = {}
 
-  that.x = x
-  that.y = y
+  that.stage = stage
+
+  that.x = stage.playerStartX
+  that.y = stage.playerStartY
   that.speed = 4
 
   that.imageWidth = 64

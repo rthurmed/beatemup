@@ -1,5 +1,5 @@
 Util = require('util')
-Player = require('src/player')
+Stage = require('src/stage')
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
@@ -9,7 +9,8 @@ function love.load()
 
   BackgroundImage = love.graphics.newImage("assets/bg.png")
 
-  Player = Player:new(200, 150)
+  Stage = Stage:new()
+  Stage:start()
 
   Keys = {}
 end
@@ -27,17 +28,15 @@ function love.keyreleased(key)
 end
 
 function love.update(dt)
-  Player:update(dt, Keys)
+  Stage:update(dt, Keys)
 end
 
 function love.draw()
-  love.graphics.draw(BackgroundImage, 0, 0)
+  Stage:draw()
 
-  Player:draw()
+  love.graphics.rectangle('line', Stage.player.x, Stage.player.y, Stage.player.imageWidth, Stage.player.imageHeight)
 
-  love.graphics.rectangle('line', Player.x, Player.y, Player.imageWidth, Player.imageHeight)
-
-  love.graphics.print('PositionX: ' .. Player.x, 0, 0)
-  love.graphics.print('PositionY: ' .. Player.y, 0, 15)
-  love.graphics.print('punchDelay: ' .. Player.punchDelay, 0, 30)
+  love.graphics.print('PositionX: ' .. Stage.player.x, 0, 0)
+  love.graphics.print('PositionY: ' .. Stage.player.y, 0, 15)
+  love.graphics.print('punchDelay: ' .. Stage.player.punchDelay, 0, 30)
 end
