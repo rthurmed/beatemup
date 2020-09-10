@@ -34,4 +34,5 @@ function love.draw()
 
   love.graphics.print('PositionX: ' .. Player.x, 0, 0)
   love.graphics.print('PositionY: ' .. Player.y, 0, 15)
+  love.graphics.print('punchDelay: ' .. Player.punchDelay, 0, 30)
 end

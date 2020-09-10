@@ -1,6 +1,7 @@
 Player = {}
 
-Player.PUNCH_DURATION = 1 /3
+Player.PUNCH_DURATION = 1 / 3
+Player.PUNCH_AFTER_DELAY = Player.PUNCH_DURATION
 
 function Player:new(x, y, scaleFactor)
   local that = {}
@@ -18,6 +19,8 @@ function Player:new(x, y, scaleFactor)
   that.standingAnimation = love.graphics.newImage("assets/dog-stand.png")
 
   that.punch = 0
+  that.punchDelay = 0
+
   that.isWalking = false
 
   that.scaleFactor = scaleFactor
@@ -57,20 +60,28 @@ function Player:update(dt, Keys)
       elseif key == 'right' then
         self.x = self.x + self:getSpeed()
       elseif key == 'space' then
-        if not self:getIsPunching() then
+        if not self:getIsPunching() and self.punchDelay <= 0 then
           self.punch = dt
         end
       end
     end
   end
 
-  if self.punch > 0 and self.punch < Player.PUNCH_DURATION then
+  -- Punch happening
+  if self.punch > 0 and self.punch < Player.PUNCH_DURATION and self.punchDelay <= 0 then
     self.punch = self.punch + dt
     Util.advanceAnimationFrame(self.punchingAnimation, dt)
   end
 
+  -- Ended punch
   if self.punch >= Player.PUNCH_DURATION then
     self.punch = 0
+    self.punchDelay = Player.PUNCH_AFTER_DELAY
+  end
+
+  -- Delay after punch
+  if self.punchDelay > 0 then
+    self.punchDelay = self.punchDelay - dt
   end
 
   self.isWalking = originalX ~= self.x or originalY ~= self.y
