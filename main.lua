@@ -3,6 +3,11 @@ Player = require('src/player')
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
+  love.graphics.setBackgroundColor(255 / 255, 255 / 255, 237 / 255, 1)
+
+  love.graphics.setColor(0, 0, 0, 1)
+
+  BackgroundImage = love.graphics.newImage("assets/bg.png")
 
   Player = Player:new(200, 150)
 
@@ -26,6 +31,8 @@ function love.update(dt)
 end
 
 function love.draw()
+  love.graphics.draw(BackgroundImage, 0, 0)
+
   Player:draw()
 
   love.graphics.rectangle('line', Player.x, Player.y, Player.imageWidth, Player.imageHeight)
