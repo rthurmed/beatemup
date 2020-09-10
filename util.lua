@@ -18,4 +18,11 @@ function Util.newAnimation(image, width, height, duration)
   return animation
 end
 
+function Util.advanceAnimationFrame(animation, time)
+  animation.currentTime = animation.currentTime + time
+  if animation.currentTime >= animation.duration then
+    animation.currentTime = animation.currentTime - animation.duration
+  end
+end
+
 return Util
