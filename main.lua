@@ -1,12 +1,10 @@
 Util = require('util')
 Player = require('src/player')
 
-SCALE_FACTOR = 40
-
 function love.load()
   love.keyboard.setKeyRepeat(true)
 
-  Player = Player:new(200, 150, SCALE_FACTOR)
+  Player = Player:new(200, 150)
 
   Keys = {}
 end

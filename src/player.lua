@@ -3,12 +3,12 @@ Player = {}
 Player.PUNCH_DURATION = 1 / 3
 Player.PUNCH_AFTER_DELAY = Player.PUNCH_DURATION
 
-function Player:new(x, y, scaleFactor)
+function Player:new(x, y)
   local that = {}
 
   that.x = x
   that.y = y
-  that.speed = 2
+  that.speed = 4
 
   that.imageWidth = 64
   that.imagePunchWidth = 96
@@ -23,22 +23,20 @@ function Player:new(x, y, scaleFactor)
 
   that.isWalking = false
 
-  that.scaleFactor = scaleFactor
-
   self.__index = self
   return setmetatable(that, self)
 end
 
 function Player:getEndX()
-  return self.imageWidth * self.y / self.scaleFactor
+  return self.imageWidth
 end
 
 function Player:getEndY()
-  return self.imageHeight * self.y / self.scaleFactor
+  return self.imageHeight
 end
 
 function Player:getSpeed()
-  return self.speed * self.y / self.scaleFactor
+  return self.speed
 end
 
 function Player:getIsPunching()
@@ -91,12 +89,12 @@ end
 function Player:draw()
   if self:getIsPunching() then
     local spriteNum = math.floor(self.punchingAnimation.currentTime / self.punchingAnimation.duration * #self.punchingAnimation.quads) + 1
-    love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], self.x, self.y, 0, self.y / self.scaleFactor)
+    love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], self.x, self.y, 0)
   elseif self.isWalking then
     local spriteNum = math.floor(self.runningAnimation.currentTime / self.runningAnimation.duration * #self.runningAnimation.quads) + 1
-    love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], self.x, self.y, 0, self.y / self.scaleFactor)
+    love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], self.x, self.y, 0)
   else
-    love.graphics.draw(self.standingAnimation, self.x, self.y, 0, self.y / self.scaleFactor)
+    love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
   end
 end
 
