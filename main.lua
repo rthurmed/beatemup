@@ -28,7 +28,7 @@ end
 function love.draw()
   Player:draw()
 
-  love.graphics.rectangle('line', Player.x, Player.y, Player:getEndX(), Player:getEndY())
+  love.graphics.rectangle('line', Player.x, Player.y, Player.imageWidth, Player.imageHeight)
 
   love.graphics.print('PositionX: ' .. Player.x, 0, 0)
   love.graphics.print('PositionY: ' .. Player.y, 0, 15)

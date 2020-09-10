@@ -1,7 +1,14 @@
+HitBox = require('src/hitbox')
+
 Player = {}
 
 Player.PUNCH_DURATION = 1 / 3
 Player.PUNCH_AFTER_DELAY = Player.PUNCH_DURATION
+
+Player.PUNCH_HITBOX_X = 52
+Player.PUNCH_HITBOX_y = 0
+Player.PUNCH_HITBOX_HEIGHT = 44
+Player.PUNCH_HITBOX_WIDTH = 44
 
 function Player:new(x, y)
   local that = {}
@@ -21,6 +28,8 @@ function Player:new(x, y)
   that.punch = 0
   that.punchDelay = 0
 
+  that.damagebox = nil
+
   that.isWalking = false
 
   self.__index = self
@@ -28,11 +37,11 @@ function Player:new(x, y)
 end
 
 function Player:getEndX()
-  return self.imageWidth
+  return self.x + self.imageWidth
 end
 
 function Player:getEndY()
-  return self.imageHeight
+  return self.y + self.imageHeight
 end
 
 function Player:getSpeed()
@@ -58,8 +67,10 @@ function Player:update(dt, Keys)
       elseif key == 'right' then
         self.x = self.x + self:getSpeed()
       elseif key == 'space' then
+        -- Start punch
         if not self:getIsPunching() and self.punchDelay <= 0 then
           self.punch = dt
+          self.damagebox = HitBox:new(self, Player.PUNCH_HITBOX_X, Player.PUNCH_HITBOX_Y, Player.PUNCH_HITBOX_HEIGHT, Player.PUNCH_HITBOX_WIDTH)
         end
       end
     end
@@ -75,6 +86,7 @@ function Player:update(dt, Keys)
   if self.punch >= Player.PUNCH_DURATION then
     self.punch = 0
     self.punchDelay = Player.PUNCH_AFTER_DELAY
+    self.damagebox = nil
   end
 
   -- Delay after punch
@@ -95,6 +107,10 @@ function Player:draw()
     love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], self.x, self.y, 0)
   else
     love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
+  end
+
+  if self.damagebox ~= nil then
+    self.damagebox:draw()
   end
 end
 
