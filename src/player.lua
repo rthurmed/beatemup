@@ -30,9 +30,9 @@ function Player:new(stage)
   that.imagePunchWidth = 96
   that.imageHeight = 96
 
-  that.runningAnimation = Util.newAnimation(love.graphics.newImage("assets/dog-run.png"), that.imageWidth, that.imageHeight, 1 / 3)
-  that.punchingAnimation = Util.newAnimation(love.graphics.newImage("assets/dog-punch.png"), that.imagePunchWidth, that.imageHeight, Player.PUNCH_DURATION)
-  that.standingAnimation = love.graphics.newImage("assets/dog-stand.png")
+  that.runningAnimation = Util.newAnimation(love.graphics.newImage("assets/player-run.png"), that.imageWidth, that.imageHeight, 1 / 3)
+  that.punchingAnimation = Util.newAnimation(love.graphics.newImage("assets/player-punch.png"), that.imagePunchWidth, that.imageHeight, Player.PUNCH_DURATION)
+  that.standingAnimation = love.graphics.newImage("assets/player-stand.png")
 
   that.punch = 0
   that.punchDelay = 0
