@@ -4,6 +4,9 @@ Player = {}
 
 Player.SPEED_RUNNING = 4
 
+Player.ACCEL_FORWARD = 1.2
+Player.ACCEL_DEFAULT = 0.8
+
 Player.CENTER_OFFSET = 72
 
 Player.PUNCH_DURATION = 1 / 3
@@ -89,13 +92,13 @@ function Player:update(dt, Keys)
   for key, value in pairs(Keys) do
     if value == true then
       if key == 'up' then
-        self:moveY(-1)
+        self:moveY(-Player.ACCEL_DEFAULT)
       elseif key == 'down' then
-        self:moveY(1)
+        self:moveY(Player.ACCEL_DEFAULT)
       elseif key == 'left' then
-        self:moveX(-1)
+        self:moveX(-Player.ACCEL_DEFAULT)
       elseif key == 'right' then
-        self:moveX(1)
+        self:moveX(Player.ACCEL_FORWARD)
       elseif key == 'space' then
         -- Start punch
         if not self:getIsPunching() and self.punchDelay <= 0 then
