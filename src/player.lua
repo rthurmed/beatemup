@@ -70,7 +70,7 @@ function Player:moveX(m)
     self.stage.backgroundX = self.stage.backgroundX - m * self:getSpeed()
   elseif newEndXOffsetRight < halfWidth and self.stage.backgroundX < 0 then
     self.stage.backgroundX = self.stage.backgroundX - m * self:getSpeed()
-  elseif newX > 0 and newEndXOffsetRight < love.graphics.getWidth() then
+  elseif newX > 0 and newX + self.imageWidth < love.graphics.getWidth() then
     self.x = newX
   end
 end
