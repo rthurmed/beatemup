@@ -2,6 +2,10 @@ HitBox = require('src/hitbox')
 
 Player = {}
 
+Player.SPEED_RUNNING = 4
+
+Player.CENTER_OFFSET = 72
+
 Player.PUNCH_DURATION = 1 / 3
 Player.PUNCH_AFTER_DELAY = Player.PUNCH_DURATION
 
@@ -17,7 +21,7 @@ function Player:new(stage)
 
   that.x = stage.playerStartX
   that.y = stage.playerStartY
-  that.speed = 4
+  that.speed = Player.SPEED_RUNNING
 
   that.imageWidth = 64
   that.imagePunchWidth = 96
@@ -54,20 +58,44 @@ function Player:getIsPunching()
   return self.punch > 0
 end
 
+function Player:moveX(m)
+  local newX = self.x + m * self:getSpeed()
+  local newEndXOffsetRight = newX + self.imageWidth + Player.CENTER_OFFSET
+  local halfWidth = love.graphics.getWidth() / 2
+
+  if newEndXOffsetRight > halfWidth and self.stage.backgroundX > -self.stage.backgroundFullWidth + self.stage.backgroundWidth then
+    self.stage.backgroundX = self.stage.backgroundX - m * self:getSpeed()
+  elseif newEndXOffsetRight < halfWidth and self.stage.backgroundX < 0 then
+    self.stage.backgroundX = self.stage.backgroundX - m * self:getSpeed()
+  elseif newX > 0 and newEndXOffsetRight < love.graphics.getWidth() then
+    self.x = newX
+  end
+end
+
+function Player:moveY(m)
+  local newY = self.y + m * self:getSpeed()
+  local newYBottom = newY + self.imageHeight
+
+  if newYBottom > self.stage.verticalLimitTop and newYBottom < self.stage.verticalLimitBottom then
+    self.y = newY
+  end
+end
+
 function Player:update(dt, Keys)
   local originalX = self.x
   local originalY = self.y
+  local originalBackgroundX = self.stage.backgroundX
 
   for key, value in pairs(Keys) do
     if value == true then
       if key == 'up' then
-        self.y = self.y - self:getSpeed()
+        self:moveY(-1)
       elseif key == 'down' then
-        self.y = self.y + self:getSpeed()
+        self:moveY(1)
       elseif key == 'left' then
-        self.x = self.x - self:getSpeed()
+        self:moveX(-1)
       elseif key == 'right' then
-        self.x = self.x + self:getSpeed()
+        self:moveX(1)
       elseif key == 'space' then
         -- Start punch
         if not self:getIsPunching() and self.punchDelay <= 0 then
@@ -96,7 +124,7 @@ function Player:update(dt, Keys)
     self.punchDelay = self.punchDelay - dt
   end
 
-  self.isWalking = originalX ~= self.x or originalY ~= self.y
+  self.isWalking = originalX ~= self.x or originalY ~= self.y or originalBackgroundX ~= self.stage.backgroundX
   Util.advanceAnimationFrame(self.runningAnimation, dt)
 end
 

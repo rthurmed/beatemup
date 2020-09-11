@@ -34,9 +34,8 @@ end
 function love.draw()
   Stage:draw()
 
-  love.graphics.rectangle('line', Stage.player.x, Stage.player.y, Stage.player.imageWidth, Stage.player.imageHeight)
-
   love.graphics.print('PositionX: ' .. Stage.player.x, 0, 0)
   love.graphics.print('PositionY: ' .. Stage.player.y, 0, 15)
   love.graphics.print('punchDelay: ' .. Stage.player.punchDelay, 0, 30)
+  love.graphics.print('Stage.backgroundX: ' .. Stage.backgroundX, 0, 45)
 end

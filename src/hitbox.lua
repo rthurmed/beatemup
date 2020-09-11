@@ -31,7 +31,7 @@ function HitBox:getEndY()
 end
 
 function HitBox:draw()
-  love.graphics.rectangle('line', self:getStartX(), self:getStartY(), self.w, self.h)
+  -- love.graphics.rectangle('line', self:getStartX(), self:getStartY(), self.w, self.h)
 end
 
 return HitBox

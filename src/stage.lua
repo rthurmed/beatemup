@@ -6,7 +6,12 @@ function Stage:new()
   local that = {}
 
   that.backgroundImage = love.graphics.newImage("assets/bg.png")
-  that.verticalLimit = 240
+  that.backgroundFullWidth = 2400
+  that.backgroundWidth = 800
+  that.backgroundX = 0
+
+  that.verticalLimitTop = 280
+  that.verticalLimitBottom = love.graphics.getHeight()
 
   that.playerStartX = 50
   that.playerStartY = 300
@@ -25,7 +30,7 @@ function Stage:update(dt, Keys)
 end
 
 function Stage:draw()
-  love.graphics.draw(self.backgroundImage, 0, 0)
+  love.graphics.draw(self.backgroundImage, self.backgroundX, 0)
   self.player:draw()
 end
 
