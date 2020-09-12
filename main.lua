@@ -10,6 +10,12 @@ function love.load()
   Stage = Stage:new()
   Stage:start()
 
+  -- https://opengameart.org/content/a-cloudy-morning-jazz
+  -- Author: https://matthewpablo.com/
+  Music = love.audio.newSource('assets/soundtrack.mp3', 'stream')
+  Music:setVolume(0.3)
+  Music:play()
+
   Keys = {}
 end
 
