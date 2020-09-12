@@ -162,6 +162,11 @@ function Player:draw()
     love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
   end
 
+  -- GUI
+  for i = 1, self.life, 1 do
+    love.graphics.draw(HeartImage, i * 30 - 10, 600 - 30)
+  end
+
   if DEBUG then
     self.hitbox:draw()
 

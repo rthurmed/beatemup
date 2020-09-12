@@ -18,6 +18,8 @@ function love.load()
 
   PunchHit = love.audio.newSource('assets/hit.flac', 'static')
 
+  HeartImage = love.graphics.newImage("assets/heart.png")
+
   Keys = {}
 end
 
