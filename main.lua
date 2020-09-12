@@ -37,6 +37,13 @@ end
 
 function love.update(dt)
   Stage:update(dt, Keys)
+
+  if Stage.player.life <= 0 then
+    love.graphics.setColor(1, 0, 0)
+    if Music:isPlaying() then
+      Music:stop()
+    end
+  end
 end
 
 function love.draw()

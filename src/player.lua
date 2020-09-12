@@ -92,6 +92,8 @@ function Player:moveY(m)
 end
 
 function Player:update(dt, Keys)
+  if self.life <= 0 then return end
+
   local originalX = self.x
   local originalY = self.y
   local originalBackgroundX = self.stage.backgroundX
@@ -153,14 +155,21 @@ function Player:update(dt, Keys)
 end
 
 function Player:draw()
-  if self:getIsPunching() then
-    local spriteNum = math.floor(self.punchingAnimation.currentTime / self.punchingAnimation.duration * #self.punchingAnimation.quads) + 1
-    love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], self.x, self.y, 0)
-  elseif self.isWalking then
-    local spriteNum = math.floor(self.runningAnimation.currentTime / self.runningAnimation.duration * #self.runningAnimation.quads) + 1
-    love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], self.x, self.y, 0)
+  if self.life <= 0 then
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.draw(self.standingAnimation, self.x, self.y, 0, 1, 1)
+    love.graphics.setColor(r, g, b, a)
   else
-    love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
+    if self:getIsPunching() then
+      local spriteNum = math.floor(self.punchingAnimation.currentTime / self.punchingAnimation.duration * #self.punchingAnimation.quads) + 1
+      love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], self.x, self.y, 0)
+    elseif self.isWalking then
+      local spriteNum = math.floor(self.runningAnimation.currentTime / self.runningAnimation.duration * #self.runningAnimation.quads) + 1
+      love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], self.x, self.y, 0)
+    else
+      love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
+    end
   end
 
   -- GUI
