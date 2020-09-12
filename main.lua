@@ -1,6 +1,8 @@
 Util = require('util')
 Stage = require('src/stage')
 
+DEBUG = true
+
 function love.load()
   love.keyboard.setKeyRepeat(true)
   love.graphics.setBackgroundColor(255 / 255, 255 / 255, 237 / 255, 1)
@@ -38,8 +40,15 @@ end
 function love.draw()
   Stage:draw()
 
-  love.graphics.print('PositionX: ' .. Stage.player.x, 0, 0)
-  love.graphics.print('PositionY: ' .. Stage.player.y, 0, 15)
-  love.graphics.print('punchDelay: ' .. Stage.player.punchDelay, 0, 30)
-  love.graphics.print('Stage.backgroundX: ' .. Stage.backgroundX, 0, 45)
+  if DEBUG then
+    love.graphics.print('PositionX: ' .. Stage.player.x, 0, 0)
+    love.graphics.print('PositionY: ' .. Stage.player.y, 0, 15)
+    love.graphics.print('punchDelay: ' .. Stage.player.punchDelay, 0, 30)
+    love.graphics.print('Stage.backgroundX: ' .. Stage.backgroundX, 0, 45)
+    love.graphics.print('LIFE: ' .. Stage.player.life, 0, 60)
+
+    if Stage.player.damagebox ~= nil then
+      love.graphics.print('HIT: ' .. (Stage.player.damagebox:isTouching(Stage.enemies[1]:getHitbox()) and 'YES' or 'NO'), 0, 75)
+    end
+  end
 end

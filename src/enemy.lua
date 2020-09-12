@@ -25,6 +25,8 @@ Enemy.FRIEND_CLOSENESS = 32
 
 Enemy.VIEW_RANGE = 200
 
+Enemy.LIFE_DEFAULT = 1
+
 function Enemy:new(stage, x, y)
   local that = {}
 
@@ -45,6 +47,9 @@ function Enemy:new(stage, x, y)
   that.punch = 0
   that.punchDelay = 0
 
+  that.life = Player.LIFE_DEFAULT
+
+  that.hitbox = nil
   that.damagebox = nil
 
   that.isFacingRight = false
@@ -65,6 +70,10 @@ end
 
 function Enemy:getEndY()
   return self.y + self.imageHeight
+end
+
+function Enemy:getHitbox()
+  return HitBox:new(self, self.stage.backgroundX, 0, self.imageHeight, self.imageWidth)
 end
 
 function Enemy:getSpeed()
@@ -153,7 +162,7 @@ function Enemy:draw()
     love.graphics.draw(self.standingAnimation, adjustedX, self.y, 0, direction, 1)
   end
 
-  love.graphics.rectangle('line', relativeX, self.y, self.imageWidth, self.imageHeight)
+  self:getHitbox():draw()
 
   if self.damagebox ~= nil then
     self.damagebox:draw()

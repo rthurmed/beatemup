@@ -30,8 +30,29 @@ function HitBox:getEndY()
   return self:getStartY() + self.h
 end
 
+function HitBox:isTouching(hitbox)
+  local overlapX = false
+  local overlapY = false
+
+  if self:getStartX() < hitbox:getStartX() then
+    overlapX = self.w + self:getStartX() > hitbox:getStartX()
+  else
+    overlapX = hitbox.w + hitbox:getStartX() > self:getStartX()
+  end
+
+  if self:getStartY() < hitbox:getStartY() then
+    overlapY = self.h + self:getStartY() > hitbox:getStartY()
+  else
+    overlapY = hitbox.h + hitbox:getStartY() > self:getStartY()
+  end
+
+  return overlapX and overlapY
+end
+
 function HitBox:draw()
-  -- love.graphics.rectangle('line', self:getStartX(), self:getStartY(), self.w, self.h)
+  if DEBUG then
+    love.graphics.rectangle('line', self:getStartX(), self:getStartY(), self.w, self.h)
+  end
 end
 
 return HitBox

@@ -17,6 +17,8 @@ Player.PUNCH_HITBOX_y = 0
 Player.PUNCH_HITBOX_HEIGHT = 44
 Player.PUNCH_HITBOX_WIDTH = 44
 
+Player.LIFE_DEFAULT = 4
+
 function Player:new(stage)
   local that = {}
 
@@ -37,6 +39,9 @@ function Player:new(stage)
   that.punch = 0
   that.punchDelay = 0
 
+  that.life = Player.LIFE_DEFAULT
+
+  that.hitbox = nil
   that.damagebox = nil
 
   that.isWalking = false
@@ -88,6 +93,10 @@ function Player:update(dt, Keys)
   local originalX = self.x
   local originalY = self.y
   local originalBackgroundX = self.stage.backgroundX
+
+  if self.hitbox == nil then
+    self.hitbox = HitBox:new(self, 0, 0, self.imageHeight, self.imageWidth)
+  end
 
   for key, value in pairs(Keys) do
     if value == true then
@@ -142,8 +151,12 @@ function Player:draw()
     love.graphics.draw(self.standingAnimation, self.x, self.y, 0)
   end
 
-  if self.damagebox ~= nil then
-    self.damagebox:draw()
+  if DEBUG then
+    self.hitbox:draw()
+
+    if self.damagebox ~= nil then
+      self.damagebox:draw()
+    end
   end
 end
 
