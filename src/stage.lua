@@ -28,6 +28,8 @@ function Stage:start()
   self.player = Player:new(self)
   table.insert(self.enemies, Enemy:new(self, 400, 430))
   table.insert(self.enemies, Enemy:new(self, 900, 280))
+  table.insert(self.enemies, Enemy:new(self, 1300, 500))
+  table.insert(self.enemies, Enemy:new(self, 1300, 300))
 end
 
 function Stage:update(dt, Keys)

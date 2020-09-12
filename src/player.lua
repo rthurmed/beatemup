@@ -135,6 +135,7 @@ function Player:update(dt, Keys)
       if self.damagebox:isTouching(enemy:getHitbox()) then
         PunchHit:play()
         enemy.life = enemy.life - Player.PUNCH_DAMAGE
+        enemy.hasDamagebox = false
         break
       end
     end

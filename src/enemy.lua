@@ -19,7 +19,9 @@ Enemy.PUNCH_HITBOX_HEIGHT = 44
 Enemy.PUNCH_HITBOX_WIDTH = 44
 
 Enemy.PUNCH_SAFE_DISTANCE = 108
-Enemy.PUNCH_ATTACK_DISTANCE = 16
+Enemy.PUNCH_ATTACK_DISTANCE = 90
+
+Enemy.PUNCH_DAMAGE = 1
 
 Enemy.FRIEND_CLOSENESS = 32
 
@@ -50,7 +52,7 @@ function Enemy:new(stage, x, y)
   that.life = Enemy.LIFE_DEFAULT
 
   that.hitbox = nil
-  that.damagebox = nil
+  that.hasDamagebox = false
 
   that.isFacingRight = false
 
@@ -76,6 +78,11 @@ function Enemy:getHitbox()
   return HitBox:new(self, self.stage.backgroundX, 0, self.imageHeight, self.imageWidth)
 end
 
+function Enemy:getDamagebox()
+  local direction = self.isFacingRight and 1 or -1
+  return HitBox:new(self, self.stage.backgroundX + direction * Enemy.PUNCH_HITBOX_X, Enemy.PUNCH_HITBOX_Y, Enemy.PUNCH_HITBOX_HEIGHT, Enemy.PUNCH_HITBOX_WIDTH)
+end
+
 function Enemy:getSpeed()
   return self.speed
 end
@@ -94,7 +101,7 @@ function Enemy:moveY(m)
   self.y = newY
 end
 
-function Enemy:think()
+function Enemy:think(dt)
   local distance = Util.distance(self:getRelativeX(), self.y, self.stage.player.x, self.stage.player.y)
   if distance < Enemy.VIEW_RANGE then
     if self.y > self.stage.player.y then
@@ -113,6 +120,11 @@ function Enemy:think()
       self:moveX(Enemy.ACCEL_DEFAULT)
     end
 
+    if distance < Enemy.PUNCH_ATTACK_DISTANCE then
+      self.punch = dt
+      self.hasDamagebox = true
+    end
+
     self.isFacingRight = self:getRelativeX() < self.stage.player.x
   end
 end
@@ -124,7 +136,7 @@ function Enemy:update(dt)
   local originalY = self.y
   local originalBackgroundX = self.stage.backgroundX
 
-  self:think()
+  self:think(dt)
 
   -- Punch happening
   if self.punch > 0 and self.punch < Enemy.PUNCH_DURATION and self.punchDelay <= 0 then
@@ -136,7 +148,14 @@ function Enemy:update(dt)
   if self.punch >= Enemy.PUNCH_DURATION then
     self.punch = 0
     self.punchDelay = Enemy.PUNCH_AFTER_DELAY
-    self.damagebox = nil
+
+    if self:getDamagebox():isTouching(self.stage.player.hitbox) then
+      PunchHit:play()
+      self.stage.player.life = self.stage.player.life - Enemy.PUNCH_DAMAGE
+      self.stage.player.damagebox = nil
+    end
+
+    self.hasDamagebox = false
   end
 
   -- Delay after punch
@@ -175,8 +194,8 @@ function Enemy:draw()
   if DEBUG then
     self:getHitbox():draw()
 
-    if self.damagebox ~= nil then
-      self.damagebox:draw()
+    if self.hasDamagebox then
+      self:getDamagebox():draw()
     end
   end
 end
