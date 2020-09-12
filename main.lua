@@ -1,7 +1,7 @@
 Util = require('util')
 Stage = require('src/stage')
 
-DEBUG = true
+DEBUG = os.getenv("DEBUG") or false
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
