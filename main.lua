@@ -39,7 +39,6 @@ function love.update(dt)
   Stage:update(dt, Keys)
 
   if Stage.player.life <= 0 then
-    love.graphics.setColor(1, 0, 0)
     if Music:isPlaying() then
       Music:stop()
     end
@@ -48,6 +47,13 @@ end
 
 function love.draw()
   Stage:draw()
+
+  if Stage.player.life <= 0 then
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print('GAME OVER. Press ESC to exit.', (love.graphics.getWidth() / 2) - 200, love.graphics.getHeight() - 100, 0, 2)
+    love.graphics.setColor(r, g, b, a)
+  end
 
   if DEBUG then
     love.graphics.print('PositionX: ' .. Stage.player.x, 0, 0)
