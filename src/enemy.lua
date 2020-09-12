@@ -47,7 +47,7 @@ function Enemy:new(stage, x, y)
   that.punch = 0
   that.punchDelay = 0
 
-  that.life = Player.LIFE_DEFAULT
+  that.life = Enemy.LIFE_DEFAULT
 
   that.hitbox = nil
   that.damagebox = nil
@@ -118,6 +118,8 @@ function Enemy:think()
 end
 
 function Enemy:update(dt)
+  if self.life <= 0 then return end
+
   local originalX = self.x
   local originalY = self.y
   local originalBackgroundX = self.stage.backgroundX
@@ -152,20 +154,30 @@ function Enemy:draw()
 
   local adjustedX = self.isFacingRight and relativeX or relativeX + self.imageWidth
 
-  if self:getIsPunching() then
-    local spriteNum = math.floor(self.punchingAnimation.currentTime / self.punchingAnimation.duration * #self.punchingAnimation.quads) + 1
-    love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], adjustedX, self.y, 0, direction, 1)
-  elseif self.isWalking then
-    local spriteNum = math.floor(self.runningAnimation.currentTime / self.runningAnimation.duration * #self.runningAnimation.quads) + 1
-    love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], adjustedX, self.y, 0, direction, 1)
-  else
+  if self.life <= 0 then
+    -- DED
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(1, 0, 0)
     love.graphics.draw(self.standingAnimation, adjustedX, self.y, 0, direction, 1)
+    love.graphics.setColor(r, g, b, a)
+  else
+    if self:getIsPunching() then
+      local spriteNum = math.floor(self.punchingAnimation.currentTime / self.punchingAnimation.duration * #self.punchingAnimation.quads) + 1
+      love.graphics.draw(self.punchingAnimation.spriteSheet, self.punchingAnimation.quads[spriteNum], adjustedX, self.y, 0, direction, 1)
+    elseif self.isWalking then
+      local spriteNum = math.floor(self.runningAnimation.currentTime / self.runningAnimation.duration * #self.runningAnimation.quads) + 1
+      love.graphics.draw(self.runningAnimation.spriteSheet, self.runningAnimation.quads[spriteNum], adjustedX, self.y, 0, direction, 1)
+    else
+      love.graphics.draw(self.standingAnimation, adjustedX, self.y, 0, direction, 1)
+    end
   end
 
-  self:getHitbox():draw()
+  if DEBUG then
+    self:getHitbox():draw()
 
-  if self.damagebox ~= nil then
-    self.damagebox:draw()
+    if self.damagebox ~= nil then
+      self.damagebox:draw()
+    end
   end
 end
 

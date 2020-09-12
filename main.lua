@@ -1,13 +1,11 @@
 Util = require('util')
 Stage = require('src/stage')
 
-DEBUG = true
+DEBUG = false
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
   love.graphics.setBackgroundColor(255 / 255, 255 / 255, 237 / 255, 1)
-
-  BackgroundImage = love.graphics.newImage("assets/bg.png")
 
   Stage = Stage:new()
   Stage:start()
@@ -17,6 +15,8 @@ function love.load()
   Music = love.audio.newSource('assets/soundtrack.mp3', 'stream')
   Music:setVolume(0.3)
   Music:play()
+
+  PunchHit = love.audio.newSource('assets/hit.flac', 'static')
 
   Keys = {}
 end

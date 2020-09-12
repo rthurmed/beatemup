@@ -17,6 +17,8 @@ Player.PUNCH_HITBOX_y = 0
 Player.PUNCH_HITBOX_HEIGHT = 44
 Player.PUNCH_HITBOX_WIDTH = 44
 
+Player.PUNCH_DAMAGE = 1
+
 Player.LIFE_DEFAULT = 4
 
 function Player:new(stage)
@@ -128,6 +130,15 @@ function Player:update(dt, Keys)
   if self.punch >= Player.PUNCH_DURATION then
     self.punch = 0
     self.punchDelay = Player.PUNCH_AFTER_DELAY
+
+    for key, enemy in pairs(self.stage.enemies) do
+      if self.damagebox:isTouching(enemy:getHitbox()) then
+        PunchHit:play()
+        enemy.life = enemy.life - Player.PUNCH_DAMAGE
+        break
+      end
+    end
+
     self.damagebox = nil
   end
 
